@@ -1,0 +1,3 @@
+rootProject.name = 'usrcloud-boot-starter'
+include 'usrcloud-spring-boot-autoconfigure'
+include 'usrcloud-spring-boot-starter'
