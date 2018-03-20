@@ -78,7 +78,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public boolean DisConnectUnCheck() throws MqttException {
+    public boolean disConnectUnCheck() throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             return false;
         }
@@ -87,7 +87,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void SubscribeForDevId(final String devId) throws MqttException {
+    public void subscribeForDevId(final String devId) throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
@@ -105,7 +105,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void SubscribeParsedByDevId(final String devId) throws MqttException {
+    public void subscribeParsedByDevId(final String devId) throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
@@ -114,7 +114,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void SubscribeParsedForUsername() throws MqttException {
+    public void subscribeParsedForUsername() throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
@@ -143,7 +143,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void DisSubscribeforDevId(final String devId) throws MqttException {
+    public void disSubscribeForDevId(final String devId) throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
@@ -152,7 +152,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void DisSubscribeforuName() throws MqttException {
+    public void disSubscribeForUsername() throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
@@ -161,7 +161,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void DisSubscribeParsedforDevId(final String devId) throws MqttException {
+    public void disSubscribeParsedForDevId(final String devId) throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
@@ -170,7 +170,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void DisSubscribeParsedForUsername() throws MqttException {
+    public void disSubscribeParsedForUsername() throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
@@ -206,7 +206,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void publishForuName(final byte[] data) throws MqttException {
+    public void publishForUsername(final byte[] data) throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
