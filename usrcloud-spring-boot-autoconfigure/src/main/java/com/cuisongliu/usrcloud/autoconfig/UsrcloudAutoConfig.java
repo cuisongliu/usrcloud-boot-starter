@@ -48,12 +48,12 @@ import org.springframework.context.annotation.Configuration;
 public class UsrcloudAutoConfig {
     private static Logger logger = LoggerFactory.getLogger(UsrcloudAutoConfig.class);
     @Autowired
-    private UsrcloudMqttCallback usrCloudMqttCallback;
+    private UsrcloudMqttCallback usrcloudMqttCallback;
 
-    @Bean
-    public UsrcloudMqttClient usrCloudMqttClient(UsrcloudProperties usrcloudProperties){
+    @Bean("usrcloudMqttClient")
+    public UsrcloudMqttClient usrcloudMqttClient(UsrcloudProperties usrcloudProperties){
         UsrcloudMqttClient adapter = new UsrcloudMqttClientImpl();
-        adapter.setUsrCloudMqttCallback(usrCloudMqttCallback);
+        adapter.setUsrCloudMqttCallback(usrcloudMqttCallback);
         try {
             adapter.connect(usrcloudProperties.getAccount(),usrcloudProperties.getPassword());
             logger.debug("连接有人云成功.");
