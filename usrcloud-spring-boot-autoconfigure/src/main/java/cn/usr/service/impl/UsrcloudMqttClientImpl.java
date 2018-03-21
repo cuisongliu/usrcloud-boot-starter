@@ -48,7 +48,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void Connect(final String userName, final String passWord) throws MqttException {
+    public void connect(final String userName, final String passWord) throws MqttException {
         final String clientId = (MqttPropertise.CLIENTID_PREFIX + userName).trim();
         this.userName = userName;
         this.mqttAsyncClient = new MqttAsyncClient(MqttPropertise.SERVER_ADDRESS, clientId, new MemoryPersistence());
@@ -96,7 +96,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void SubscribeForUsername() throws MqttException {
+    public void subscribeForUsername() throws MqttException {
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }

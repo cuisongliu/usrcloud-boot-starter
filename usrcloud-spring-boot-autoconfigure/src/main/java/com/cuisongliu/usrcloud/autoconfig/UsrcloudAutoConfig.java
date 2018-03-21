@@ -51,11 +51,11 @@ public class UsrcloudAutoConfig {
     private UsrcloudMqttCallback usrCloudMqttCallback;
 
     @Bean
-    public UsrcloudMqttClient usrCloudMqttClient(UsrcloudProperties usrcloudProperties) throws Exception {
+    public UsrcloudMqttClient usrCloudMqttClient(UsrcloudProperties usrcloudProperties){
         UsrcloudMqttClient adapter = new UsrcloudMqttClientImpl();
         adapter.setUsrCloudMqttCallback(usrCloudMqttCallback);
         try {
-            adapter.Connect(usrcloudProperties.getAccount(),usrcloudProperties.getPassword());
+            adapter.connect(usrcloudProperties.getAccount(),usrcloudProperties.getPassword());
             logger.debug("连接有人云成功.");
         } catch (MqttException e) {
             logger.error("连接有人云失败.");

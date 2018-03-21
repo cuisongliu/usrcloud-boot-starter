@@ -27,8 +27,7 @@ package cn.usr.service;
  * @author cuisongliu [cuisongliu@qq.com]
  * @since 2018-03-08 19:53
  */
-public interface UsrcloudMqttCallback
-{
+public interface UsrcloudMqttCallback {
     /**
      *  连接响应回调函数
      *  0x00	连接成功

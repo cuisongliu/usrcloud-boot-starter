@@ -39,7 +39,7 @@ public interface UsrcloudMqttClient {
      * @param userName 用户名
      * @param passWord 密码	  无返回值	最终有没有连接成功,要通过 onConnectAck 设置的回调函数来判断。
      */
-    void Connect(final String userName, final String passWord) throws MqttException;
+    void connect(final String userName, final String passWord) throws MqttException;
 
     /**
      * 断开连接
@@ -73,7 +73,7 @@ public interface UsrcloudMqttClient {
      *
      * @throws MqttException
      */
-    void SubscribeForUsername() throws MqttException;
+    void subscribeForUsername() throws MqttException;
 
     /**
      * 云组态操作
