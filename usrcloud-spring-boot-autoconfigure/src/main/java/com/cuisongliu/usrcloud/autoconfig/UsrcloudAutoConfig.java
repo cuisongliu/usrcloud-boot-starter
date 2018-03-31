@@ -55,7 +55,7 @@ public class UsrcloudAutoConfig {
         UsrcloudMqttClient adapter = new UsrcloudMqttClientImpl();
         adapter.setUsrCloudMqttCallback(usrcloudMqttCallback);
         try {
-            adapter.connect(usrcloudProperties.getAccount(),usrcloudProperties.getPassword());
+            adapter.connect(usrcloudProperties.getAccount(),usrcloudProperties.getPassword(),usrcloudProperties.getTimeout(),usrcloudProperties.getKeepAlive());
             logger.debug("连接有人云成功.");
         } catch (MqttException e) {
             logger.error("连接有人云失败.");

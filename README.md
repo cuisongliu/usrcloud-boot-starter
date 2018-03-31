@@ -35,7 +35,7 @@ Add the following dependency to your pom.xml:
     <dependency>
        <groupId>com.cuisongliu</groupId>
        <artifactId>usrcloud-spring-boot-starter</artifactId>
-       <version>1.3</version>
+       <version>1.4</version>
      </dependency>
 
 
@@ -121,6 +121,9 @@ at  application.properties or application.yml append your account message.
 | :------|:------|:------|
 |spring.usrcloud.account|no|null|
 |spring.usrcloud.password|no|null|
+|spring.usrcloud.timeout|yes|20|
+|spring.usrcloud.keepAlive|yes|600|
+
 
 ## Example
 

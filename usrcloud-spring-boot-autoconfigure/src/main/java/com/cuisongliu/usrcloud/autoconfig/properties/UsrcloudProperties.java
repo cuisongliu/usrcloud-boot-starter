@@ -44,6 +44,14 @@ public class UsrcloudProperties {
      * 密码
      */
     private String password;
+    /**
+     * 超时时间
+     */
+    private Integer timeout = 20;
+    /**
+     * 保持活动时间
+     */
+    private Integer keepAlive =600;
 
     public String getAccount() {
         return account;
@@ -59,5 +67,21 @@ public class UsrcloudProperties {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Integer timeout) {
+        this.timeout = timeout;
+    }
+
+    public Integer getKeepAlive() {
+        return keepAlive;
+    }
+
+    public void setKeepAlive(Integer keepAlive) {
+        this.keepAlive = keepAlive;
     }
 }

@@ -48,7 +48,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void connect(final String userName, final String passWord) throws MqttException {
+    public void connect(final String userName, final String passWord,final Integer timeout,final Integer keepAlive) throws MqttException {
         final String clientId = (MqttPropertise.CLIENTID_PREFIX + userName).trim();
         this.userName = userName;
         this.mqttAsyncClient = new MqttAsyncClient(MqttPropertise.SERVER_ADDRESS, clientId, new MemoryPersistence());
@@ -56,8 +56,8 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         options.setCleanSession(true);
         options.setUserName(userName);
         options.setPassword(BeasUtils.getMD5(passWord).toCharArray());
-        options.setConnectionTimeout(20);
-        options.setKeepAliveInterval(600);
+        options.setConnectionTimeout(timeout);
+        options.setKeepAliveInterval(keepAlive);
         options.setAutomaticReconnect(true);
         this.mqttAsyncClient.setCallback(this);
         this.mqttAsyncClient.connect(options, null, new IMqttActionListener() {
