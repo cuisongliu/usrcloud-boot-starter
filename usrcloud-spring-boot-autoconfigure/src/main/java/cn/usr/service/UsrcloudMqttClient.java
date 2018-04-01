@@ -35,13 +35,8 @@ public interface UsrcloudMqttClient {
 
     /**
      * 初始化客户端
-     *
-     * @param userName 用户名
-     * @param passWord 密码	  无返回值	最终有没有连接成功,要通过 onConnectAck 设置的回调函数来判断。
-     * @param timeout  超时时间
-     * @param keepAlive  保持活动时间
      */
-    void connect(final String userName, final String passWord,final Integer timeout,final Integer keepAlive) throws MqttException;
+    void connect() throws MqttException;
 
     /**
      * 断开连接

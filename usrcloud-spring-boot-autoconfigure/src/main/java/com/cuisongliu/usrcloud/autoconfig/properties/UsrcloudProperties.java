@@ -45,13 +45,22 @@ public class UsrcloudProperties {
      */
     private String password;
     /**
-     * 超时时间
+     *  设置超时时间，单位为秒
      */
-    private Integer timeout = 20;
+    private Integer timeout = 60;
     /**
-     * 保持活动时间
+     * 心跳时间，单位为秒。即多长时间确认一次Client端是否在线
      */
-    private Integer keepAlive =600;
+    private Integer keepAlive =60;
+
+    /**
+     * 不记忆连接中的任何状态
+     */
+    private Boolean cleanSession = true;
+    /**
+     * 是否自动重连
+     */
+    private Boolean automaticReconnect = true;
 
     public String getAccount() {
         return account;
@@ -83,5 +92,21 @@ public class UsrcloudProperties {
 
     public void setKeepAlive(Integer keepAlive) {
         this.keepAlive = keepAlive;
+    }
+
+    public Boolean getCleanSession() {
+        return cleanSession;
+    }
+
+    public void setCleanSession(Boolean cleanSession) {
+        this.cleanSession = cleanSession;
+    }
+
+    public Boolean getAutomaticReconnect() {
+        return automaticReconnect;
+    }
+
+    public void setAutomaticReconnect(Boolean automaticReconnect) {
+        this.automaticReconnect = automaticReconnect;
     }
 }

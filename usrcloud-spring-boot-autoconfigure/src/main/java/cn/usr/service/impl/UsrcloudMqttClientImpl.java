@@ -27,8 +27,11 @@ import cn.usr.entity.MqttPropertise;
 import cn.usr.service.UsrcloudMqttCallback;
 import cn.usr.service.UsrcloudMqttClient;
 import cn.usr.utils.BeasUtils;
+import com.cuisongliu.usrcloud.autoconfig.properties.UsrcloudProperties;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
@@ -36,11 +39,15 @@ import java.util.Arrays;
  * @author cuisongliu [cuisongliu@qq.com]
  * @since 2018-03-08 19:54
  */
-public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqttClient
-{
+public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqttClient{
+    private Logger logger = LoggerFactory.getLogger(UsrcloudMqttClient.class);
     private UsrcloudMqttCallback usrCloudMqttCallback;
-    private volatile String userName;
     private volatile MqttAsyncClient mqttAsyncClient;
+    private final UsrcloudProperties properties;
+
+    public UsrcloudMqttClientImpl(UsrcloudProperties properties) {
+        this.properties = properties;
+    }
 
     @Override
     public void setUsrCloudMqttCallback(final UsrcloudMqttCallback usrCloudMqttCallback) {
@@ -48,17 +55,16 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
     }
 
     @Override
-    public void connect(final String userName, final String passWord,final Integer timeout,final Integer keepAlive) throws MqttException {
-        final String clientId = (MqttPropertise.CLIENTID_PREFIX + userName).trim();
-        this.userName = userName;
+    public void connect() throws MqttException {
+        final String clientId = (MqttPropertise.CLIENTID_PREFIX + properties.getAccount()).trim();
         this.mqttAsyncClient = new MqttAsyncClient(MqttPropertise.SERVER_ADDRESS, clientId, new MemoryPersistence());
         final MqttConnectOptions options = new MqttConnectOptions();
-        options.setCleanSession(true);
-        options.setUserName(userName);
-        options.setPassword(BeasUtils.getMD5(passWord).toCharArray());
-        options.setConnectionTimeout(timeout);
-        options.setKeepAliveInterval(keepAlive);
-        options.setAutomaticReconnect(true);
+        options.setCleanSession(properties.getCleanSession());
+        options.setUserName(properties.getAccount());
+        options.setPassword(BeasUtils.getMD5(properties.getPassword()).toCharArray());
+        options.setConnectionTimeout(properties.getTimeout());
+        options.setKeepAliveInterval(properties.getKeepAlive());
+        options.setAutomaticReconnect(properties.getAutomaticReconnect());
         this.mqttAsyncClient.setCallback(this);
         this.mqttAsyncClient.connect(options, null, new IMqttActionListener() {
             @Override
@@ -92,7 +98,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
             throw new MqttException(32104);
         }
         final String topic = MqttPropertise.TOPIC_SUBSCRIBE_DEV_RAW.replaceAll("<Id>", devId);
-        this.Subscribe(topic);
+        this.subscribe(topic);
     }
 
     @Override
@@ -100,8 +106,8 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
-        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_RAW.replaceAll("<Account>", this.userName);
-        this.Subscribe(topic);
+        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_RAW.replaceAll("<Account>", this.properties.getAccount());
+        this.subscribe(topic);
     }
 
     @Override
@@ -110,7 +116,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
             throw new MqttException(32104);
         }
         final String topic = MqttPropertise.TOPIC_SUBSCRIBE_DEV_PARSED.replaceAll("<Id>", devId);
-        this.Subscribe(topic);
+        this.subscribe(topic);
     }
 
     @Override
@@ -118,11 +124,11 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
-        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_PARSED.replaceAll("<Account>", this.userName);
-        this.Subscribe(topic);
+        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_PARSED.replaceAll("<Account>", this.properties.getAccount());
+        this.subscribe(topic);
     }
 
-    private void Subscribe(final String topic) throws MqttException {
+    private void subscribe(final String topic) throws MqttException {
         final int[] Qos = { 0 };
         final String[] topics = { topic.trim() };
         this.mqttAsyncClient.subscribe(topics, Qos).setActionCallback(new IMqttActionListener() {
@@ -148,7 +154,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
             throw new MqttException(32104);
         }
         final String topic = MqttPropertise.TOPIC_SUBSCRIBE_DEV_RAW.replaceAll("<Id>", devId);
-        this.UnSubscribe(topic);
+        this.unSubscribe(topic);
     }
 
     @Override
@@ -156,8 +162,8 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
-        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_RAW.replaceAll("<Account>", this.userName);
-        this.UnSubscribe(topic);
+        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_RAW.replaceAll("<Account>", this.properties.getAccount());
+        this.unSubscribe(topic);
     }
 
     @Override
@@ -166,7 +172,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
             throw new MqttException(32104);
         }
         final String topic = MqttPropertise.TOPIC_SUBSCRIBE_DEV_PARSED.replaceAll("<Id>", devId);
-        this.UnSubscribe(topic);
+        this.unSubscribe(topic);
     }
 
     @Override
@@ -174,11 +180,11 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
-        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_PARSED.replaceAll("<Account>", this.userName);
-        this.UnSubscribe(topic);
+        final String topic = MqttPropertise.TOPIC_SUBSCRIBE_USER_PARSED.replaceAll("<Account>", this.properties.getAccount());
+        this.unSubscribe(topic);
     }
 
-    private void UnSubscribe(final String topic) throws MqttException {
+    private void unSubscribe(final String topic) throws MqttException {
         this.mqttAsyncClient.unsubscribe(topic).setActionCallback(new IMqttActionListener() {
             @Override
             public void onSuccess(final IMqttToken iMqttToken) {
@@ -202,7 +208,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
             throw new MqttException(32104);
         }
         final String topic = MqttPropertise.TOPIC_PUBLISH_DEV_RAW.replaceAll("<Id>", devId);
-        this.PublishData(topic, data);
+        this.publishData(topic, data);
     }
 
     @Override
@@ -210,8 +216,8 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         if (this.mqttAsyncClient == null && !this.mqttAsyncClient.isConnected()) {
             throw new MqttException(32104);
         }
-        final String topic = MqttPropertise.TOPIC_PUBLISH_USER_RAW.replaceAll("<Account>", this.userName);
-        this.PublishData(topic, data);
+        final String topic = MqttPropertise.TOPIC_PUBLISH_USER_RAW.replaceAll("<Account>", this.properties.getAccount());
+        this.publishData(topic, data);
     }
 
     @Override
@@ -221,7 +227,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         }
         final String topic = MqttPropertise.TOPIC_PUBLISH_DEV_PARSED.replaceAll("<Id>", devId);
         final String data = MqttPropertise.JSON_SETDATAPOINT.replaceAll("%SLAVEINDEX%", slaveIndex).replaceAll("%POINTID%", pointId).replaceAll("%POINTVALUE%", value);
-        this.PublishData(topic, data.getBytes());
+        this.publishData(topic, data.getBytes());
     }
 
     @Override
@@ -231,10 +237,10 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         }
         final String topic = MqttPropertise.TOPIC_PUBLISH_DEV_PARSED.replaceAll("<Id>", devId);
         final String data = MqttPropertise.JSON_QUERYDATAPOINT.replaceAll("%SLAVEINDEX%", slaveIndex).replaceAll("%POINTID%", pointId);
-        this.PublishData(topic, data.getBytes());
+        this.publishData(topic, data.getBytes());
     }
 
-    private void PublishData(final String topic, final byte[] data) throws MqttException {
+    private void publishData(final String topic, final byte[] data) throws MqttException {
         final MqttMessage mqttMessage = new MqttMessage();
         mqttMessage.setQos(1);
         mqttMessage.setRetained(true);
@@ -262,8 +268,19 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
 
     @Override
     public void connectionLost(final Throwable cause) {
+        logger.error("MQTT连接断开",cause);
         if (this.usrCloudMqttCallback != null) {
-            this.usrCloudMqttCallback.onConnectAck(3, cause.toString());
+            if (this.properties.getAutomaticReconnect()){
+                //如果设置了自动重连
+                try {
+                    this.connect();
+                } catch (MqttException e) {
+                    this.usrCloudMqttCallback.onConnectAck(3, e.toString());
+                }
+            }else {
+                this.usrCloudMqttCallback.onConnectAck(3, cause.toString());
+            }
+
         }
     }
 
