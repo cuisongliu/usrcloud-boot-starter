@@ -52,6 +52,10 @@ public class UsrcloudProperties {
      * 心跳时间，单位为秒。即多长时间确认一次Client端是否在线
      */
     private Integer keepAlive =60;
+    /**
+     *
+     */
+    private Integer maxInflight = 10;
 
     /**
      * 不记忆连接中的任何状态
@@ -108,5 +112,13 @@ public class UsrcloudProperties {
 
     public void setAutomaticReconnect(Boolean automaticReconnect) {
         this.automaticReconnect = automaticReconnect;
+    }
+
+    public Integer getMaxInflight() {
+        return maxInflight;
+    }
+
+    public void setMaxInflight(Integer maxInflight) {
+        this.maxInflight = maxInflight;
     }
 }

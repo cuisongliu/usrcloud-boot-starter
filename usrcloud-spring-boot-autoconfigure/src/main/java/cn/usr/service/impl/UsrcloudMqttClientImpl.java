@@ -64,6 +64,7 @@ public class UsrcloudMqttClientImpl implements MqttCallbackExtended, UsrcloudMqt
         options.setPassword(BeasUtils.getMD5(properties.getPassword()).toCharArray());
         options.setConnectionTimeout(properties.getTimeout());
         options.setKeepAliveInterval(properties.getKeepAlive());
+        options.setMaxInflight(properties.getMaxInflight());
         options.setAutomaticReconnect(properties.getAutomaticReconnect());
         this.mqttAsyncClient.setCallback(this);
         this.mqttAsyncClient.connect(options, null, new IMqttActionListener() {
